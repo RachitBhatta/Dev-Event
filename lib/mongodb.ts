@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 
 // Define the type for our cached connection
 interface MongooseCache {
@@ -7,7 +7,6 @@ interface MongooseCache {
 }
 
 // Extend the global object to include our mongoose cache
-// This prevents TypeScript errors when accessing global.mongoose
 declare global {
   // eslint-disable-next-line no-var
   var mongoose: MongooseCache | undefined;
@@ -47,11 +46,14 @@ async function connectDB(): Promise<typeof mongoose> {
 
   // If a connection promise doesn't exist, create one
   if (!cached.promise) {
-    const opts = {
-      bufferCommands: false, // Disable command buffering
+    // Properly typed connection options for Mongoose v6+
+    const opts: ConnectOptions = {
+      bufferCommands: false, // Disable command buffering for immediate errors
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    // Non-null assertion (!) since we already validated MONGODB_URI above
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+      console.log("✅ MongoDB connected successfully");
       return mongoose;
     });
   }
@@ -62,6 +64,7 @@ async function connectDB(): Promise<typeof mongoose> {
   } catch (e) {
     // If connection fails, reset the promise so it can be retried
     cached.promise = null;
+    console.error("❌ MongoDB connection failed:", e);
     throw e;
   }
 
