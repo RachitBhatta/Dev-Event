@@ -1,17 +1,21 @@
 import { Event } from "@/database";
 import connectDB from "@/lib/mongodb";
 import {v2 as cloudinary} from "cloudinary"
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
-import { resolve } from "path";
 
 export async function POST(req:NextRequest){
     try {
         await connectDB();
 
-        const formData=await req.formData()
-
+        const formData=await req.formData();
+        
         let events;
+         //Get the images from user  as a file 
+        const file =formData.get('image') as File;
+        if(!file){
+            return NextResponse.json({message:"Image is required"},{status:400});
+        }
+        
         try {
             events=Object.fromEntries(formData.entries())
         } catch (e) {
@@ -20,11 +24,6 @@ export async function POST(req:NextRequest){
             },{
                 status:400
             })
-        }
-        //Get the images from user  as a file 
-        const file =formData.get('image') as File;
-        if(!file){
-            return NextResponse.json({message:"Image is required"},{status:400});
         }
         // converting it in to binary code and uploading it into cloudinary
         const arrayBuffer=await file.arrayBuffer();
@@ -40,9 +39,9 @@ export async function POST(req:NextRequest){
         })
         events.image= (uploadFile as {secure_url:string}).secure_url;
 
-    
-        const createdEvent=await Event.create(event);
 
+    
+        const createdEvent=await Event.create(events);
         return NextResponse.json(
             {message:"Event created Successfully",event:createdEvent},
             {status:201}
