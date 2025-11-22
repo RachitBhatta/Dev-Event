@@ -26,8 +26,7 @@ const BookEvent = () => {
                     placeholder="Enter your email address"
                 />
             </div>
-            <button type="submit"className="button-submit">Submit</button>
-
+            <button type="submit" className="button-submit">Submit</button>
         </form>
       )}
     </div>
