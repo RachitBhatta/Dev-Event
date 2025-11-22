@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import BookEvent from "@/components/BookEvent";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
@@ -33,11 +34,34 @@ const EventTags=({tags}:{tags:string[]})=>{
 }
 const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
   const {slug}=await params;
-  const request =await fetch(`${BASE_URL}/api/events/${slug}`);
-  const {event:{description,title,image,agenda,venue,location,time,audience,organizer,overview,date,mode,tags}}= await request.json();
-  if(!description){
+  if (!BASE_URL) {
     return notFound();
   }
+  
+  let event;
+  try {
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+      cache: 'no-store'
+    });
+  
+    if (!request.ok) {
+      return notFound();
+    }
+    
+    const response = await request.json();
+    event = response.data || response.event;
+    
+    if (!event || !event.description) {
+      return notFound();
+    }
+  } catch (error) {
+    console.error('Error fetching event:', error);
+      return notFound();
+  }
+  
+  const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
+  const bookings=0;
+  
   return (
     <section id='event'>
       <div className='header'>
@@ -88,12 +112,23 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
 
         {/* Right side -- booking area */}
           <aside>
-            <p className="text-lg font-semibold">Book Events</p>
+            <div className="signup-card">
+                <h2>Book Your sopn</h2>
+                {bookings>0?(
+                  <p className="text-sm">
+                    Join {bookings} have already booked their spot
+                  </p>
+                ):(
+                  <p className="text-sm">Be the first to book your spot</p>
+                )}
+                <BookEvent/>
+            </div>
           </aside>
 
       </div>
     </section>
   )
 }
+
 
 export default EventsDetailsPage;
