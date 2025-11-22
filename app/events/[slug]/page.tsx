@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import BookEvent from "@/components/BookEvent";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
@@ -33,11 +34,34 @@ const EventTags=({tags}:{tags:string[]})=>{
 }
 const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
   const {slug}=await params;
-  const request =await fetch(`${BASE_URL}/api/events/${slug}`);
-  const {event:{description,title,image,agenda,venue,location,time,audience,organizer,overview,date,mode,tags}}= await request.json();
-  if(!description){
+  if (!BASE_URL) {
     return notFound();
   }
+  
+  let event;
+  try {
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+      cache: 'no-store'
+    });
+  
+    if (!request.ok) {
+      return notFound();
+    }
+    
+    const response = await request.json();
+    event = response.data || response.event;
+    
+    if (!event || !event.description) {
+      return notFound();
+    }
+  } catch (error) {
+    console.error('Error fetching event:', error);
+      return notFound();
+  }
+  
+  const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
+  const bookings=0;
+  
   return (
     <section id='event'>
       <div className='header'>
@@ -45,7 +69,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
         <p className="mt-2">{description}</p>
       </div>
       <div className="details">
-        {/* Left side -- content area*/
+        {/* Left side -- content area*/}
         <div className="content">
           <Image src={image} alt="Events Bannner" width={800} height={800} className='banner' />
 
@@ -56,30 +80,55 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           <section className="flex-col-gap-2 mt-4">
             <h2>Events Details</h2>
 
-            <EventsDetailsItems icon="/icon/calendar.svg" alt="Date" label={date}/>
-            <EventsDetailsItems icon="/icon/clock.svg" alt="Time" label={time}/>
-            <EventsDetailsItems icon="/icon/pin.svg" alt="Location" label={location}/>
-            <EventsDetailsItems icon="/icon/mode.svg" alt="mode" label={mode}/>
-            <EventsDetailsItems icon="/icon/audience.svg" alt="Audience" label={audience}/>
+            <EventsDetailsItems icon="/icons/calendar.svg" alt="Date" label={date}/>
+            <EventsDetailsItems icon="/icons/clock.svg" alt="Time" label={time}/>
+            <EventsDetailsItems icon="/icons/pin.svg" alt="Location" label={location}/>
+            <EventsDetailsItems icon="/icons/mode.svg" alt="mode" label={mode}/>
+            <EventsDetailsItems icon="/icons/audience.svg" alt="Audience" label={audience}/>
           </section>
-          <EventAgenda  agendaItems={JSON.parse(agenda[0])}/>
+          <EventAgenda  agendaItems={(()=>{
+            try {
+              return JSON.parse(agenda[0])
+            } catch (error) {
+              console.error(error);
+              return [];
+            }
+          })()}/>
           <section className="flex-col-gap-2">
             <h2>About the Organizer</h2>
             <p>{organizer}</p>
           </section>
-          <EventTags tags={JSON.parse(tags[0])}/>
+          <EventTags tags={(()=>{
+            try {
+              return JSON.parse(tags[0])
+            } catch (e) {
+              console.error(e);
+              return [];
+            }
+            })()}/>
         </div>
 
-        }
+        
 
-        {/* Right side -- booking area */
+        {/* Right side -- booking area */}
           <aside>
-            <p className="text-lg font-semibold">Book Events</p>
+            <div className="signup-card">
+                <h2>Book Your sopn</h2>
+                {bookings>0?(
+                  <p className="text-sm">
+                    Join {bookings} have already booked their spot
+                  </p>
+                ):(
+                  <p className="text-sm">Be the first to book your spot</p>
+                )}
+                <BookEvent/>
+            </div>
           </aside>
-        }
+
       </div>
     </section>
   )
 }
+
 
 export default EventsDetailsPage;
