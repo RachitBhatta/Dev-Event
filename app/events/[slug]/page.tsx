@@ -45,7 +45,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
         <p className="mt-2">{description}</p>
       </div>
       <div className="details">
-        /* Left side -- content area*/
+        {/* Left side -- content area*/}
         <div className="content">
           <Image src={image} alt="Events Bannner" width={800} height={800} className='banner' />
 
@@ -86,7 +86,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
 
         
 
-        /* Right side -- booking area */
+        {/* Right side -- booking area */}
           <aside>
             <p className="text-lg font-semibold">Book Events</p>
           </aside>
