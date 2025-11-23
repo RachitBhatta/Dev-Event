@@ -8,7 +8,9 @@ export const getSimilarEventsBySlug=async(slug:string)=>{
         if(!event){
             return [];
         }
-        return await Event.find({_id:{$ne: event._id,tags:{$in: event.tags}}});
+        return await Event.find({
+            _id:{$ne: event._id},
+            tags:{$in: event.tags}}).lean();
     } catch (error) {
         console.error(error);
         return [];

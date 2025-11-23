@@ -63,7 +63,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
   }
   
   const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
-  const bookings=0;
+  const bookings=10;
   const similarEvents:IEvent[]=await getSimilarEventsBySlug(slug);
   
   return (
@@ -92,7 +92,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </section>
           <EventAgenda  agendaItems={(()=>{
             try {
-              return JSON.parse(agenda[0])
+              return (agenda)
             } catch (error) {
               console.error(error);
               return [];
@@ -104,7 +104,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </section>
           <EventTags tags={(()=>{
             try {
-              return JSON.parse(tags[0])
+              return (tags)
             } catch (e) {
               console.error(e);
               return [];
@@ -130,15 +130,16 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </aside>
 
       </div>
-    <div className="flex w-full flex-col gap-4 pt-20">
-          <h2>Similar Events</h2>
-          <div className="events">
-            {similarEvents.length>0 && similarEvents.map((similarEvent:IEvent)=>(
-                <EventCard key={similarEvent.id}{...similarEvent}/>
-            ))}
-          </div>
-    </div>
-    </section>
+    {similarEvents.length > 0 && (
+        <div className="flex w-full flex-col gap-4 pt-20">
+            <h2>Similar Events</h2>
+            <div className="events">
+                {similarEvents.map((similarEvent:IEvent)=>(
+                    <EventCard key={similarEvent.id}{...similarEvent}/>
+                ))}
+            </div>
+        </div>
+    )}    </section>
   )
 }
 
