@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import BookEvent from "@/components/BookEvent";
+import { IEvent } from "@/database";
+import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
+import EventCard from "@/components/EventCard";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
   return(
-  <div className="felx-row-gap-2 items-center">
+  <div className="flex-row-gap-2 items-center">
     <Image src={icon} alt={alt} width={17} height={17} />
     <p>{label}</p>
   </div>
@@ -60,7 +63,8 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
   }
   
   const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
-  const bookings=0;
+  const bookings=10;
+  const similarEvents= await getSimilarEventsBySlug(slug);
   
   return (
     <section id='event'>
@@ -88,7 +92,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </section>
           <EventAgenda  agendaItems={(()=>{
             try {
-              return JSON.parse(agenda[0])
+              return (agenda)
             } catch (error) {
               console.error(error);
               return [];
@@ -100,7 +104,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </section>
           <EventTags tags={(()=>{
             try {
-              return JSON.parse(tags[0])
+              return (tags)
             } catch (e) {
               console.error(e);
               return [];
@@ -113,7 +117,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
         {/* Right side -- booking area */}
           <aside>
             <div className="signup-card">
-                <h2>Book Your sopn</h2>
+                <h2>Book Your spot</h2>
                 {bookings>0?(
                   <p className="text-sm">
                     Join {bookings} have already booked their spot
@@ -126,7 +130,16 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
           </aside>
 
       </div>
-    </section>
+    {similarEvents.length > 0 && (
+        <div className="flex w-full flex-col gap-4 pt-20">
+            <h2>Similar Events</h2>
+            <div className="events">
+                {similarEvents.map((similarEvent)=>(
+                    <EventCard key={similarEvent.id} {...similarEvent}/>
+                ))}
+            </div>
+        </div>
+    )}    </section>
   )
 }
 

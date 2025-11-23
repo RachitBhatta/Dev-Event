@@ -25,6 +25,8 @@ export async function POST(req:NextRequest){
                 status:400
             })
         }
+        let tags=JSON.parse(formData.get('tags') as string);
+        let agenda=JSON.parse(formData.get('agenda') as string);
         // converting it in to binary code and uploading it into cloudinary
         const arrayBuffer=await file.arrayBuffer();
         const buffer=Buffer.from(arrayBuffer);
@@ -41,7 +43,11 @@ export async function POST(req:NextRequest){
 
 
     
-        const createdEvent=await Event.create(events);
+        const createdEvent=await Event.create({
+            ...events,
+            tags:tags,
+            agenda:agenda,
+        });
         return NextResponse.json(
             {message:"Event created Successfully",event:createdEvent},
             {status:201}
