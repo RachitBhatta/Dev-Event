@@ -8,7 +8,7 @@ import EventCard from "@/components/EventCard";
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
   return(
-  <div className="felx-row-gap-2 items-center">
+  <div className="flex-row-gap-2 items-center">
     <Image src={icon} alt={alt} width={17} height={17} />
     <p>{label}</p>
   </div>
@@ -64,7 +64,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
   
   const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
   const bookings=10;
-  const similarEvents:IEvent[]=await getSimilarEventsBySlug(slug);
+  const similarEvents= await getSimilarEventsBySlug(slug);
   
   return (
     <section id='event'>
@@ -117,7 +117,7 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
         {/* Right side -- booking area */}
           <aside>
             <div className="signup-card">
-                <h2>Book Your sopn</h2>
+                <h2>Book Your spot</h2>
                 {bookings>0?(
                   <p className="text-sm">
                     Join {bookings} have already booked their spot
@@ -134,8 +134,8 @@ const EventsDetailsPage = async({params}:{params:Promise<{slug:string}>}) => {
         <div className="flex w-full flex-col gap-4 pt-20">
             <h2>Similar Events</h2>
             <div className="events">
-                {similarEvents.map((similarEvent:IEvent)=>(
-                    <EventCard key={similarEvent.id}{...similarEvent}/>
+                {similarEvents.map((similarEvent)=>(
+                    <EventCard key={similarEvent.id} {...similarEvent}/>
                 ))}
             </div>
         </div>
