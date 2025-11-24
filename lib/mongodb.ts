@@ -6,30 +6,21 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null;
 }
 
-// Extend the global object to include our mongoose cache
-declare global {
-  // eslint-disable-next-line no-var
-  var mongoose: MongooseCache | undefined;
-}
-
-// Retrieve MongoDB URI from environment variables
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
-  );
-}
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections from growing exponentially
  * during API Route usage.
+ * Uses globalThis for better cross-environment compatibility.
  */
-let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
+const globalForMongoose = globalThis as typeof globalThis & {
+  mongoose?: MongooseCache;
+};
 
-if (!global.mongoose) {
-  global.mongoose = cached;
+let cached: MongooseCache = globalForMongoose.mongoose || { conn: null, promise: null };
+
+if (!globalForMongoose.mongoose) {
+  globalForMongoose.mongoose = cached;
 }
 
 /**
@@ -39,6 +30,15 @@ if (!global.mongoose) {
  * @returns {Promise<typeof mongoose>} The Mongoose instance
  */
 async function connectDB(): Promise<typeof mongoose> {
+  // Validate MongoDB URI
+  const MONGODB_URI = process.env.MONGODB_URI;
+  
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Please define the MONGODB_URI environment variable inside .env.local"
+    );
+  }
+
   // If a connection already exists, return it
   if (cached.conn) {
     return cached.conn;
@@ -51,8 +51,8 @@ async function connectDB(): Promise<typeof mongoose> {
       bufferCommands: false, // Disable command buffering for immediate errors
     };
 
-    // Non-null assertion (!) since we already validated MONGODB_URI above
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+    // Connect to MongoDB (MONGODB_URI is validated above)
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       console.log("✅ MongoDB connected successfully");
       return mongoose;
     });

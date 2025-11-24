@@ -5,7 +5,7 @@ import { IEvent } from "@/database";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
 import EventCard from "@/components/EventCard";
 import { cacheLife } from "next/cache";
-
+import { getBookingCount } from "@/lib/actions/booking.action";
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
   return(
@@ -65,7 +65,8 @@ const EventDetails = async({params}:{params:Promise<string>}) => {
       return notFound();
   }
   const { description, title, image, agenda, venue, location, time, audience, organizer, overview, date, mode, tags } = event;
-  const similarEvents:IEvent[]= await getSimilarEventsBySlug(slug);
+  const bookings=await getBookingCount(event._id);
+  const similarEvents= await getSimilarEventsBySlug(slug);
 
   
   return (
@@ -136,8 +137,8 @@ const EventDetails = async({params}:{params:Promise<string>}) => {
         <div className="flex w-full flex-col gap-4 pt-20">
             <h2>Similar Events</h2>
             <div className="events">
-                {similarEvents.map((similarEvent: IEvent)=>(
-+                    <EventCard key={similarEvent.title} {...similarEvent}/>
+                {similarEvents.map((similarEvent)=>(
+                        <EventCard key={similarEvent.title} {...similarEvent}/>
                 ))}
             </div>
         </div>

@@ -1,7 +1,12 @@
 'use server';
+import { Document } from "mongoose";
 import connectDB from "../mongodb";
-import Event from "@/database/event.model"
-export const getSimilarEventsBySlug=async(slug:string)=>{
+import Event, { IEvent } from "@/database/event.model";
+
+// Type for lean event documents (plain objects without Mongoose methods)
+type LeanEvent = Omit<IEvent, keyof Document>;
+
+export const getSimilarEventsBySlug = async (slug: string): Promise<LeanEvent[]> => {
     try {
         await connectDB();
         const event =await Event.findOne({slug});
