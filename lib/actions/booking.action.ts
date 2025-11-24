@@ -14,7 +14,7 @@ export const createBooking=async({eventId,slug,email}:{eventId:string;slug:strin
 export const getBookingCount=async(eventId:string):Promise<number>=>{
     try {
         await connectDB();
-        const count=Booking.countDocuments({eventId});
+        const count=await Booking.countDocuments({eventId});
         return count;
     } catch (error) {
         console.error("Error fetching booking count",error)
