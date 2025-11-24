@@ -6,7 +6,7 @@ import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
 import EventCard from "@/components/EventCard";
 import { cacheLife } from "next/cache";
 import { getBookingCount } from "@/lib/actions/booking.action";
-const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL=process.env.NEXT_PUBLIC_BASE_URL||'https://dev-event-delta.vercel.app';
 const EventsDetailsItems=({icon,alt,label}:{icon:string,alt:string,label:string})=>{
   return(
   <div className="flex-row-gap-2 items-center">
