@@ -16,16 +16,18 @@ const BookEvent = ({eventId,slug}:{eventId:string,slug:string}) => {
           posthog.capture('event booked',{eventId,slug,email});
         }else{
           console.error("Booking Submission Failed");
+          setError("Booking submission failed. Please try again.");
           posthog.captureException('booking creation failed');
         }
 
     }
     return (
-    <div className="book-event">
+    <div id="book-event">
       {isSubmitted?(
         <p className="text-sm">Thank you for signing up!</p>
       ):(
         <form onSubmit={handleSubmit}>
+            {error && <p className="text-sm text-red-500">{error}</p>}
             <div>
                 <label htmlFor="email">Email Address</label>
                 <input 

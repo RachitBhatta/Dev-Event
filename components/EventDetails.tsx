@@ -118,19 +118,31 @@ const EventDetails = async({params}:{params:Promise<string>}) => {
         
 
         {/* Right side -- booking area */}
-          <aside>
-            <div className="signup-card">
-                <h2>Book Your spot</h2>
-                {bookings>0?(
-                  <p className="text-sm">
-                    Join {bookings} have already booked their spot
-                  </p>
-                ):(
-                  <p className="text-sm">Be the first to book your spot</p>
-                )}
-                <BookEvent eventId={event._id} slug={slug}/>
-            </div>
-          </aside>
+          <aside className="booking w-full md:w-[380px]">
+  <div className="
+      signup-card 
+      backdrop-blur-xl 
+      bg-black/40 
+      border border-emerald-400/20 
+      shadow-[0_0_25px_rgba(0,255,180,0.15)]
+      rounded-2xl p-6 space-y-4
+  ">
+      <h2 className="text-2xl font-semibold text-emerald-300">
+        Book Your Spot
+      </h2>
+
+      {bookings > 0 ? (
+        <p className="text-sm text-gray-300">
+          Join <span className="text-emerald-400">{bookings}</span> others who have already booked
+        </p>
+      ) : (
+        <p className="text-sm text-gray-400">Be the first to book your spot</p>
+      )}
+
+      <BookEvent eventId={event._id} slug={slug} />
+  </div>
+</aside>
+
 
       </div>
     {similarEvents.length > 0 && (
