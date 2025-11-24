@@ -6,6 +6,8 @@ const BookEvent = ({eventId,slug}:{eventId:string,slug:string}) => {
     const [email,setEmail]=useState('');
     const [isSubmitted,setisSubmitted]=useState(false);
     const handleSubmit=async(e:React.FormEvent)=>{
+        e.preventDefault();
+
         const {success}= await createBooking({eventId,slug,email});
         if(success){
           setisSubmitted(true);
@@ -14,11 +16,7 @@ const BookEvent = ({eventId,slug}:{eventId:string,slug:string}) => {
           console.error("Booking Submission Failed");
           posthog.captureException('booking creation failed');
         }
-        e.preventDefault();
 
-        setTimeout(()=>{
-            setisSubmitted(true);
-        },1000)
     }
     return (
     <div className="book-event">

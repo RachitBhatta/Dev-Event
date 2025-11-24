@@ -7,6 +7,6 @@ export const createBooking=async({eventId,slug,email}:{eventId:string;slug:strin
         return {success:true}
     } catch (error) {
         console.error(error);
-        return {success:false,error:error}
+        return {success:false }
     }
 }
