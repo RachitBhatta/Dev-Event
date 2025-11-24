@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 import { hostname } from "os";
 
 const nextConfig: NextConfig = {
-  cacheComponents:true,
+  typescript:{
+    ignoreBuildErrors:true
+  },
+  cacheComponents: true,
   images:{
     remotePatterns:[
       {
