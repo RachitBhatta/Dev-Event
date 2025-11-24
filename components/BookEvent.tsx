@@ -5,8 +5,10 @@ import { useState } from "react";
 const BookEvent = ({eventId,slug}:{eventId:string,slug:string}) => {
     const [email,setEmail]=useState('');
     const [isSubmitted,setisSubmitted]=useState(false);
+    const [error, setError] = useState('');
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault();
+        setError(''); 
 
         const {success}= await createBooking({eventId,slug,email});
         if(success){
