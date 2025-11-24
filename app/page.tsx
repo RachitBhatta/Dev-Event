@@ -1,6 +1,6 @@
 import Explorebtn from '@/components/Explorebtn'
 import EventCard from '@/components/EventCard'
-
+import events from '@/lib/constants';
 import { IEvent } from '@/database';
 import { cacheLife } from 'next/cache';
 
