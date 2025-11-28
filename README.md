@@ -12,7 +12,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
-[Live Demo](https://dev-event-delta.vercel.app) • [Report Bug](https://github.com/yourusername/dev-events/issues) • [Request Feature](https://github.com/yourusername/dev-events/issues)
+[Live Demo](https://dev-event-delta.vercel.app) • [Report Bug](https://github.com/RachitBhatta/dev-events/issues) • [Request Feature](https://github.com/RachitBhatta/dev-events/issues)
 
 </div>
 
@@ -574,13 +574,13 @@ copies of the Software...
 
 ## 📧 Contact
 
-**Project Maintainer**: Your Name
+**Project Maintainer**: Rachit Bhatta
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
+- GitHub: [RachitBhatta](https://github.com/RachitBhatta)
+- Email: rachitbhatta2009@gmail.com
+- LinkedIn: RachitBhatta(https://linkedin.com/in/yourprofile)
 
-**Project Link**: [https://github.com/yourusername/dev-events](https://github.com/yourusername/dev-events)
+**Project Link**: [https://github.com/RachitBhatta/dev-events](https://github.com/RachitBhatta/dev-events)
 
 ---
 
