@@ -578,7 +578,7 @@ copies of the Software...
 
 - GitHub: [RachitBhatta](https://github.com/RachitBhatta)
 - Email: rachitbhatta2009@gmail.com
-- LinkedIn: RachitBhatta(https://linkedin.com/in/yourprofile)
+- LinkedIn: RachitBhatta(https://linkedin.com/in/RachitBhatta)
 
 **Project Link**: [https://github.com/RachitBhatta/dev-events](https://github.com/RachitBhatta/dev-events)
 
